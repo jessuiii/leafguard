@@ -1,10 +1,8 @@
 # LeafGuard - Advanced Plant Disease Detection System
 
-LeafGuard is an AI-powered plant disease detection system that integrates multiple state-of-the-art machine learning models for accurate plant disease identification and treatment recommendations.
+LeafGuard is an AI-powered plant disease detection system that integrates machine learning models for accurate plant disease identification and treatment recommendations.
 
 ## 🌟 Features
-
-- **Multiple AI Models**: Choose from different specialized models for optimal accuracy
 - **Comprehensive Disease Coverage**: Support for 39+ plant diseases across 14+ plant types
 - **Real-time Analysis**: Fast inference with detailed confidence scores
 - **Treatment Recommendations**: Expert advice for each identified disease
@@ -13,7 +11,7 @@ LeafGuard is an AI-powered plant disease detection system that integrates multip
 
 ## 🚀 Model Integration Branches
 
-This project includes **three specialized model integration branches**, each optimized for different use cases:
+This project includes:
 
 ### 🍅 Marko Tomato-Only Branch (`marko-tomato-only`) - **RECOMMENDED**
 **Source**: [MarkoArsenovic/DeepLearning_PlantDiseases](https://github.com/MarkoArsenovic/DeepLearning_PlantDiseases) (Tomato subset)
@@ -25,37 +23,6 @@ This project includes **three specialized model integration branches**, each opt
 - **Specialization**: Highest accuracy for tomato farming applications
 - **Documentation**: [README-Marko-Tomato.md](README-Marko-Tomato.md)
 
-### 🏆 Marko Full Models Branch (`marko-model-integration`)
-**Source**: [MarkoArsenovic/DeepLearning_PlantDiseases](https://github.com/MarkoArsenovic/DeepLearning_PlantDiseases)
-
-- **Models**: AlexNet, DenseNet169, Inception_v3, ResNet34, VGG13, SqueezeNet1_1
-- **Coverage**: PlantVillage dataset (39 classes, 14+ plant types)
-- **Best Accuracy**: 99.76% (Inception_v3)
-- **Framework**: PyTorch
-- **Specialization**: Comprehensive multi-plant disease detection
-- **Documentation**: [README-Marko.md](README-Marko.md)
-
-### � Bhargavi Models Branch (`b-model-integration`)
-**Source**: [Bhargavidev26/Early-Tomato-Leaf-Disease-Prediction](https://github.com/Bhargavidev26/Early-Tomato-Leaf-Disease-Prediction)
-
-- **Models**: Custom CNN, VGG16, ResNet50
-- **Focus**: Tomato disease classification (10 classes)
-- **Best Accuracy**: 94%/93% (Custom CNN)
-- **Framework**: TensorFlow/Keras
-- **Specialization**: Alternative approach for tomato crops
-- **Documentation**: [README-Bhargavi.md](README-Bhargavi.md)
-
-## 📊 Performance Comparison
-
-| Branch | Best Model | Accuracy | Framework | Classes | Use Case |
-|--------|------------|----------|-----------|---------|----------|
-| **marko-tomato-only** | Inception_v3 | **99.76%** | PyTorch | 10 (tomato) | **Production tomato farming** |
-| marko-model-integration | Inception_v3 | 99.76% | PyTorch | 39 (multi-plant) | Research & multi-crop |
-| b-model-integration | Custom CNN | 94% | TensorFlow | 10 (tomato) | Alternative approach |
-
-## �📋 Project Info
-
-**URL**: https://lovable.dev/projects/ea7323f6-27d3-42d6-9b28-90c4a79d3150
 
 ## 🛠 How to Use Different Model Branches
 
@@ -66,39 +33,7 @@ pip install -r backend/requirements.txt
 uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-### Switch to Marko Full Models (Multi-plant detection)
-```bash
-git checkout marko-model-integration
-pip install -r backend/requirements.txt
-uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-### Switch to Bhargavi Models (Alternative tomato approach)
-```bash
-git checkout b-model-integration
-pip install -r backend/requirements.txt
-uvicorn backend.main:app --host 0.0.0.0 --port 5000 --reload
-```bash
-git checkout marko-model-integration
-pip install -r backend/requirements.txt
-uvicorn backend.main:app --host 0.0.0.0 --port 5000 --reload
-```
-
 ### Available API Endpoints
-
-#### Bhargavi Models
-- `POST /predict/bhargavi/cnn` - Custom CNN model
-- `POST /predict/bhargavi/vgg16` - VGG16 transfer learning
-- `POST /predict/bhargavi/resnet50` - ResNet50 transfer learning
-
-#### Marko Models
-- `POST /predict/marko/densenet169` - Best performing model
-- `POST /predict/marko/inception_v3` - Highest accuracy
-- `POST /predict/marko/alexnet` - Fast inference
-- `POST /predict/marko/resnet34` - Balanced performance
-- `POST /predict/marko/vgg13` - Reliable baseline
-- `POST /predict/marko/squeezenet1_1` - Lightweight model
-
 #### Common Endpoints
 - `GET /health` - System health check
 - `GET /models` - Available models information
@@ -139,25 +74,6 @@ uvicorn backend.main:app --host 0.0.0.0 --port 5000 --reload
 # Step 7: In a new terminal, start the frontend
 npm run dev
 ```
-
-## 📊 Model Performance Comparison
-
-| Model | Framework | Accuracy | Classes | Best For |
-|-------|-----------|----------|---------|----------|
-| Inception_v3 (Marko) | PyTorch | 99.76% | 39 | Highest accuracy |
-| DenseNet169 (Marko) | PyTorch | 99.72% | 39 | Best balance |
-| Custom CNN (Bhargavi) | TensorFlow | 94% | 10 | Tomato specialization |
-| ResNet34 (Marko) | PyTorch | 99.67% | 39 | Efficiency |
-| ResNet50 (Bhargavi) | TensorFlow | 68% | 10 | Transfer learning |
-
-## 🔧 Development Options
-
-## 🔧 Development Options
-
-### Use Lovable Platform
-Simply visit the [Lovable Project](https://lovable.dev/projects/ea7323f6-27d3-42d6-9b28-90c4a79d3150) and start prompting.
-Changes made via Lovable will be committed automatically to this repo.
-
 ### Use Your Preferred IDE
 Clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
@@ -172,16 +88,6 @@ Clone this repo and push changes. Pushed changes will also be reflected in Lovab
 - Select the "Codespaces" tab
 - Click on "New codespace" to launch a new Codespace environment
 
-## 🧬 Training Your Own Models
-
-Both model branches include comprehensive training scripts:
-
-### Bhargavi Models Training
-```bash
-cd backend/models
-python bhargavi_trainer.py
-```
-
 ### Marko Models Training
 ```bash
 cd backend/models
@@ -189,8 +95,6 @@ python marko_trainer.py
 ```
 
 ## 📚 Documentation
-
-- [Bhargavi Models Documentation](./README-Bhargavi.md) - Detailed guide for tomato disease models
 - [Marko Models Documentation](./README-Marko.md) - Comprehensive multi-plant disease models
 
 ## 🤝 Contributing
@@ -206,8 +110,6 @@ python marko_trainer.py
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 🙏 Acknowledgments
-
-- [Bhargavidev26](https://github.com/Bhargavidev26) for tomato disease classification models
 - [MarkoArsenovic](https://github.com/MarkoArsenovic) for comprehensive PlantVillage models
 - PlantVillage dataset contributors
 - Open source community for frameworks and tools
@@ -223,14 +125,4 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/ea7323f6-27d3-42d6-9b28-90c4a79d3150) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
