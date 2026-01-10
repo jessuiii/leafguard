@@ -17,4 +17,6 @@ open3d
 trimesh[easy]
 opencv-python
 pymeshlab
-opencv-python
+requests
+azure-storage-blob
+azure-core

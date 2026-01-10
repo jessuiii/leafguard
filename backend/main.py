@@ -5,10 +5,9 @@ Real FastAPI server with your trained DenseNet model integration
 
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 import os
 import tempfile
-import json
 import requests
 ## Removed azure_config import; GLB URLs and storage info should be handled via SmartGLBAssigner or direct config
 from smart_glb_assigner import SmartGLBAssigner
@@ -45,13 +44,11 @@ async def root():
         "status": "running",
         "model_status": model_status,
         "endpoints": [
-            "/analyze-leaf-real",
-            "/glb-urls", 
-            "/storage-info",
+            "/analyze-leaf",
+            "/proxy-glb/{filename}",
             "/model-info",
-            "/api/plants",
-            "/api/health-stats",
-            "/api/database-status"
+            "/docs",
+            "/openapi.json"
         ]
     }
 
@@ -203,7 +200,7 @@ def convert_azure_url_to_proxy(azure_url: str) -> str:
     """
     if "leafguardstorage.blob.core.windows.net/glb-models/" in azure_url:
         filename = azure_url.split("/")[-1]
-    return f"http://localhost:8000/proxy-glb/{filename}"
+        return f"http://localhost:8000/proxy-glb/{filename}"
     return azure_url
 
 if __name__ == "__main__":

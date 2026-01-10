@@ -5,11 +5,9 @@ Automatically determines which GLB file to use based on DenseNet analysis of upl
 
 import cv2
 import numpy as np
-from typing import Dict, Any, Tuple
+from typing import Dict, Any
 import os
 from PIL import Image
-import io
-import base64
 from models.densenet_tomato_model import DenseNetTomatoClassifier
 
 class SmartGLBAssigner:
