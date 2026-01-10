@@ -1,128 +1,249 @@
 # LeafGuard - Advanced Plant Disease Detection System
 
-LeafGuard is an AI-powered plant disease detection system that integrates machine learning models for accurate plant disease identification and treatment recommendations.
+# 🌿 LeafGuard
 
-## 🌟 Features
-- **Comprehensive Disease Coverage**: Support for 39+ plant diseases across 14+ plant types
-- **Real-time Analysis**: Fast inference with detailed confidence scores
-- **Treatment Recommendations**: Expert advice for each identified disease
-- **Modern Web Interface**: User-friendly React frontend with camera integration
-- **RESTful API**: FastAPI backend with comprehensive endpoints
+LeafGuard is a full-stack web application for **plant leaf disease analysis**.  
+Users upload or capture a photo of a plant leaf, the backend runs a machine-learning model on the image, and the app returns the predicted plant health status along with optional **3D visualization assets (GLB files)**.
 
-## 🚀 Model Integration Branches
+This repository contains both the **frontend (React)** and **backend (FastAPI + ML inference)** code.
 
-This project includes:
+---
 
-### 🍅 Marko Tomato-Only Branch (`marko-tomato-only`) - **RECOMMENDED**
-**Source**: [MarkoArsenovic/DeepLearning_PlantDiseases](https://github.com/MarkoArsenovic/DeepLearning_PlantDiseases) (Tomato subset)
+## 🧠 How It Works (System Overview)
 
-- **Models**: AlexNet, DenseNet169, Inception_v3, ResNet34, VGG13, SqueezeNet1_1
-- **Focus**: Tomato disease classification only (10 classes)
-- **Best Accuracy**: 99.76% (Inception_v3)
-- **Framework**: PyTorch
-- **Specialization**: Highest accuracy for tomato farming applications
-- **Documentation**: [README-Marko-Tomato.md](README-Marko-Tomato.md)
-
-
-## 🛠 How to Use Different Model Branches
-
-### Switch to Marko Tomato-Only (RECOMMENDED for tomato farming)
-```bash
-git checkout marko-tomato-only
-pip install -r backend/requirements.txt
-uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-### Available API Endpoints
-#### Common Endpoints
-- `GET /health` - System health check
-- `GET /models` - Available models information
-- `POST /predict` - Original model (backward compatibility)
+Browser (React UI)
+↓ image upload
+FastAPI Backend
+↓ ML inference
+Prediction Result (JSON)
+↓
+Frontend renders result + optional 3D model
 
-## 🏃‍♂️ Quick Start
+```
 
-### Prerequisites
-- Node.js & npm - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-- Python 3.8+ with pip
-- Git
+1. User captures or uploads a leaf image in the browser  
+2. Image is sent to the FastAPI backend  
+3. Backend runs a trained ML model on the image  
+4. Backend returns prediction data (class, confidence, health status)  
+5. Frontend displays results and optionally loads a 3D GLB model  
 
-### Installation Steps
+---
+
+## 📁 Project Structure
+
+```
+
+leafguard/
+│
+├── backend/
+│   ├── main.py              # FastAPI app and inference endpoints
+│   ├── requirements.txt     # Backend dependencies
+│   └── ...                  # ML helpers, assets, configs
+│
+├── src/
+│   ├── App.tsx              # Main React application
+│   ├── components/          # UI components
+│   ├── hooks/               # React hooks
+│   └── styles/              # Styling (Tailwind / CSS)
+│
+├── .env.example             # Environment variable template
+├── package.json             # Frontend dependencies
+└── README.md
+
+```
+
+---
+
+## ⚙️ Backend (FastAPI)
+
+### Entry Point
+```
+
+backend/main.py
+
+````
+
+### Backend Responsibilities
+
+- Loads a pre-trained machine learning model at startup
+- Accepts uploaded leaf images
+- Runs inference on uploaded images
+- Maps predictions to:
+  - plant health status
+  - disease class
+  - confidence score
+  - optional 3D GLB model
+- Proxies GLB files from Azure Blob Storage to avoid CORS issues
+
+---
+
+### API Endpoints
+
+#### `GET /`
+Health check endpoint.  
+Returns server status and whether the ML model is loaded.
+
+---
+
+#### `GET /model-info`
+Returns metadata about the loaded model, including:
+- load status
+- class names
+- device information
+- available GLB assets
+
+---
+
+#### `POST /analyze-leaf`
+**Main inference endpoint**
+
+**Request**
+- Content-Type: `multipart/form-data`
+- Field name: `file`
+- Value: image file (`.jpg`, `.png`, etc.)
+
+**Response (example)**
+```json
+{
+  "status": "healthy",
+  "predicted_class": "Tomato_Healthy",
+  "confidence": 0.94,
+  "glb_model_url": "/proxy-glb/healthy.glb"
+}
+````
+
+---
+
+#### `GET /proxy-glb/{filename}`
+
+Proxies GLB files from Azure Blob Storage and serves them with proper CORS headers so they can be loaded directly in the browser.
+
+---
+
+## 🧠 Machine Learning
+
+* The ML model is loaded once when the backend starts
+* Image preprocessing and prediction are handled internally
+* Each prediction includes:
+
+  * predicted class
+  * confidence score
+* Predictions can be mapped to corresponding **3D GLB models** for visualization
+
+> The backend assumes trained model weights are already available and properly configured.
+
+---
+
+## 🖥️ Frontend (React + TypeScript)
+
+### Entry Point
+
+```
+src/App.tsx
+```
+
+### Frontend Responsibilities
+
+* Capture image from camera or upload from device
+* Preview selected image
+* Send image to backend using `fetch` and `FormData`
+* Display prediction results:
+
+  * health status
+  * disease name
+  * confidence score
+* Load and display optional 3D GLB models
+* Store previous plant scans in browser local storage
+
+---
+
+## 🔐 Environment Variables
+
+Create a `.env` file using `.env.example` as a reference.
+
+### Backend
+
+* Model paths
+* Azure Blob Storage configuration
+* Allowed frontend origins
+
+### Frontend
+
+* Backend API base URL
+
+---
+
+## ▶️ Running Locally
+
+### Backend
 
 ```bash
-# Step 1: Clone the repository
-git clone <YOUR_GIT_URL>
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
 
-# Step 2: Navigate to the project directory
-cd <YOUR_PROJECT_NAME>
+Backend runs at:
 
-# Step 3: Install frontend dependencies
+```
+http://localhost:8000
+```
+
+---
+
+### Frontend
+
+```bash
 npm install
-
-# Step 4: Choose your model branch
-# For Bhargavi models (tomato-focused):
-git checkout b-model-integration
-
-# OR for Marko models (multi-plant):
-git checkout marko-model-integration
-
-# Step 5: Install Python dependencies
-pip install -r backend/requirements.txt
-
-# Step 6: Start the backend
-uvicorn backend.main:app --host 0.0.0.0 --port 5000 --reload
-
-# Step 7: In a new terminal, start the frontend
 npm run dev
 ```
-### Use Your Preferred IDE
-Clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
-### Edit Files Directly in GitHub
-- Navigate to the desired file(s)
-- Click the "Edit" button (pencil icon) at the top right of the file view
-- Make your changes and commit the changes
+Frontend runs at:
 
-### Use GitHub Codespaces
-- Navigate to the main page of your repository
-- Click on the "Code" button (green button) near the top right
-- Select the "Codespaces" tab
-- Click on "New codespace" to launch a new Codespace environment
-
-### Marko Models Training
-```bash
-cd backend/models
-python marko_trainer.py
+```
+http://localhost:5173
 ```
 
-## 📚 Documentation
-- [Marko Models Documentation](./README-Marko.md) - Comprehensive multi-plant disease models
+---
 
-## 🤝 Contributing
+## 🧪 Notes & Limitations
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+* No automated tests included
+* Model training pipeline is not part of this repository
+* No authentication or authorization
+* Not production-hardened
+* Assumes model files are already present
 
-## 📄 License
+---
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+## 🚀 What This Project Is
 
-## 🙏 Acknowledgments
-- [MarkoArsenovic](https://github.com/MarkoArsenovic) for comprehensive PlantVillage models
-- PlantVillage dataset contributors
-- Open source community for frameworks and tools
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+✔ A working full-stack ML inference application
+✔ Image → model → prediction pipeline
+✔ Real backend inference (not mocked)
+✔ Frontend and backend clearly separated
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+## ❌ What This Project Is Not
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+✘ A production-ready service
+✘ A fully documented ML training framework
+✘ A public API with versioning
+
+---
+
+## 📌 Future Improvements
+
+* Add backend and frontend tests
+* Document model training and evaluation
+* Add Docker support
+* Add CI/CD pipelines
+* Improve error handling and logging
+
+```
+
 
 
