@@ -1,0 +1,5 @@
+DenseNet169 Tomato Disease Model
+Best Accuracy: 0.9944 (99.44%)
+Epochs: 25
+Batch Size: 32
+Model File: densenet169_tomato.pth
